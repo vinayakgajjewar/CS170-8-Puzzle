@@ -33,17 +33,33 @@ class Node:
 
     # The below methods check if the corresponding operator is legal given the current puzzle state
 
+    # If the blank is in the first row, we cannot perform this operation
     def is_blank_up_legal(self):
-        pass
+        if 0 in self.row1:
+            return False
+        else:
+            return True
 
+    # If the blank is in the bottom row, we cannot perform this operation
     def is_blank_down_legal(self):
-        pass
+        if 0 in self.row3:
+            return False
+        else:
+            return True
 
+    # If the blank is in the first column, we cannot perform this operation
     def is_blank_left_legal(self):
-        pass
+        if self.row1[0] == 0 or self.row2[0] == 0 or self.row3[0] == 0:
+            return False
+        else:
+            return True
 
+    # If the blank is in the third column, we cannot perform this operation
     def is_blank_right_legal(self):
-        pass
+        if self.row1[2] == 0 or self.row2[2] == 0 or self.row3[2] == 0:
+            return False
+        else:
+            return True
 
 if __name__ == '__main__':
     sys.exit('Don\'t run node.py directly!')
