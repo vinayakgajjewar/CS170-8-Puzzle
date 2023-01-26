@@ -20,6 +20,7 @@ class Node:
     def locate_tile(self, tile):
         if tile not in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             sys.exit('Error: trying to find a tile that doesn\'t exist.')
+
         row = None
         col = None
 
@@ -50,16 +51,28 @@ class Node:
     # If the operator is not valid, these methods will throw an error and complain
 
     def blank_up(self):
-        pass
+        new_row1 = self.row1
+        new_row2 = self.row2
+        new_row3 = self.row3
+        return [new_row1, new_row2, new_row3]
 
     def blank_down(self):
-        pass
+        new_row1 = self.row1
+        new_row2 = self.row2
+        new_row3 = self.row3
+        return [new_row1, new_row2, new_row3]
 
     def blank_left(self):
-        pass
+        new_row1 = self.row1
+        new_row2 = self.row2
+        new_row3 = self.row3
+        return [new_row1, new_row2, new_row3]
 
     def blank_right(self):
-        pass
+        new_row1 = self.row1
+        new_row2 = self.row2
+        new_row3 = self.row3
+        return [new_row1, new_row2, new_row3]
 
     # The below methods check if the corresponding operator is legal given the current puzzle state
     # TODO: rewrite these using locate_tile()
