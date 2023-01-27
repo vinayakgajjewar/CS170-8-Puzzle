@@ -16,6 +16,22 @@ class Node:
         self.row2 = row2
         self.row3 = row3
 
+    # Utility method for string representation of the node
+    def __str__(self):
+        return f'{self.row1[0]} {self.row1[1]} {self.row1[2]}\n{self.row2[0]} {self.row2[1]} {self.row2[2]}\n{self.row3[0]} {self.row3[1]} {self.row3[2]}'
+
+    # Utility function to get the tile at a specified row and column
+    # Rows and columns are 1-indexed
+    def get_tile(self, row, col):
+        if (row not in [1, 2, 3]) or (col not in [1, 2, 3]):
+            sys.exit('Error: row/col value not in range.')
+        if row == 1:
+            return self.row1[col - 1]
+        elif row == 2:
+            return self.row2[col - 1]
+        elif row == 3:
+            return self.row3[col - 1]
+
     # Utility function to get the row and column of whatever tile we want
     def locate_tile(self, tile):
         if tile not in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
@@ -51,24 +67,44 @@ class Node:
     # If the operator is not valid, these methods will throw an error and complain
 
     def blank_up(self):
+
+        # Check if the operation is legal
+        if self.is_blank_up_legal() == False:
+            sys.exit('Error: can\'t move the blank up in this configuration.')
+
         new_row1 = self.row1
         new_row2 = self.row2
         new_row3 = self.row3
         return [new_row1, new_row2, new_row3]
 
     def blank_down(self):
+
+        # Check if the operation is legal
+        if self.is_blank_down_legal() == False:
+            sys.exit('Error: can\'t move the blank down in this configuration.')
+
         new_row1 = self.row1
         new_row2 = self.row2
         new_row3 = self.row3
         return [new_row1, new_row2, new_row3]
 
     def blank_left(self):
+
+        # Check if the operation is legal
+        if self.is_blank_left_legal() == False:
+            sys.exit('Error: can\'t move the blank left in this configuration.')
+
         new_row1 = self.row1
         new_row2 = self.row2
         new_row3 = self.row3
         return [new_row1, new_row2, new_row3]
 
     def blank_right(self):
+
+        # Check if the operation is legal
+        if self.is_blank_right_legal() == False:
+            sys.exit('Error: can\'t move the blank right in this configuration.')
+
         new_row1 = self.row1
         new_row2 = self.row2
         new_row3 = self.row3
