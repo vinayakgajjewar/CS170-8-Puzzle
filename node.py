@@ -124,7 +124,7 @@ class Node:
 
             # Switch the tiles
             self.row3[blank_loc[1] - 1] = 0
-            self.row2[blank_loc[1] - 1] = 0
+            self.row2[blank_loc[1] - 1] = bottom_tile
         else:
             sys.exit('We should definitely not be here.')
 
