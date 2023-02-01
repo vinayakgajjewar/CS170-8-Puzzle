@@ -72,14 +72,13 @@ class Node:
         if self.is_blank_up_legal() == False:
             sys.exit('Error: can\'t move the blank up in this configuration.')
 
-        # Find the locaation of the blank
+        # Find the location of the blank
         blank_loc = self.locate_tile(0)
 
         if blank_loc[0] == 2:
             
             # The blank is in the 2nd row, so let's figure out what tile is on top of it
             top_tile = self.get_tile(1, blank_loc[1])
-            print(f'The tile on top of the blank is {top_tile}.')
 
             # Switch the tiles
             self.row1[blank_loc[1] - 1] = 0
@@ -88,7 +87,6 @@ class Node:
             
             # The blank is in the 3rd row, so let's figure out what tile is on top of it
             top_tile = self.get_tile(2, blank_loc[1])
-            print(f'The tile on top of the blank is {top_tile}.')
 
             # Switch the tiles
             self.row2[blank_loc[1] - 1] = 0
@@ -107,6 +105,28 @@ class Node:
         # Check if the operation is legal
         if self.is_blank_down_legal() == False:
             sys.exit('Error: can\'t move the blank down in this configuration.')
+
+        # Find the location of the blank
+        blank_loc = self.locate_tile(0)
+
+        if blank_loc[0] == 1:
+
+            # The blank is in the 1st row, so let's figure out what tile is under it
+            bottom_tile = self.get_tile(2, blank_loc[1])
+
+            # Switch the tiles
+            self.row2[blank_loc[1] - 1] = 0
+            self.row1[blank_loc[1] - 1] = bottom_tile
+        elif blank_loc[0] == 2:
+            
+            # The blank is in the 2nd row, so let's figure out what tile is under it
+            bottom_tile = self.get_tile(3, blank_loc[1])
+
+            # Switch the tiles
+            self.row3[blank_loc[1] - 1] = 0
+            self.row2[blank_loc[1] - 1] = 0
+        else:
+            sys.exit('We should definitely not be here.')
 
         new_row1 = self.row1
         new_row2 = self.row2
