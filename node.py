@@ -20,6 +20,8 @@ class Node:
 
     # Utility method for string representation of the node
     def __str__(self):
+
+        # Pretty-print the board state
         return f'{self.row1[0]} {self.row1[1]} {self.row1[2]}\n{self.row2[0]} {self.row2[1]} {self.row2[2]}\n{self.row3[0]} {self.row3[1]} {self.row3[2]}'
 
     # Utility function to get the tile at a specified row and column
@@ -267,6 +269,18 @@ class Node:
             return False
         else:
             return True
+
+    # The below methods are for heuristics
+
+    # Misplaced tile heuristic
+    # Just return the number of tiles that aren't in the proper spot
+    def misplaced_tile_heuristic(self):
+        pass
+
+    # Euclidean distance heuristic
+    # Sum up the Euclidean distances of each tile to where it should be
+    def euclidean_distance_heuristic(self):
+        pass
 
 if __name__ == '__main__':
     sys.exit('Don\'t run node.py directly!')
