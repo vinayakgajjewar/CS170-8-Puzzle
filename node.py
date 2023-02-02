@@ -1,3 +1,5 @@
+# node.py
+
 import sys
 
 class Node:
@@ -160,7 +162,7 @@ class Node:
             else:
                 sys.exit('We really should not be here.')
         elif blank_loc[1] == 3:
-            
+
             # The blank is in the 3rd column, so let's figure out what tile is to the left of it
             left_tile = self.get_tile(blank_loc[0], 2)
 
@@ -189,6 +191,46 @@ class Node:
         # Check if the operation is legal
         if self.is_blank_right_legal() == False:
             sys.exit('Error: can\'t move the blank right in this configuration.')
+
+        # Find the location of the blank
+        blank_loc = self.locate_tile(0)
+
+        if blank_loc[1] == 1:
+
+            # The blank is in the 1st column, so let's figure out what tile is to the right of it
+            right_tile = self.get_tile(blank_loc[0], 2)
+
+            # Switch the tiles
+            if blank_loc[0] == 1:
+                self.row1[1] = 0
+                self.row1[0] = right_tile
+            elif blank_loc[0] == 2:
+                self.row2[1] = 0
+                self.row2[0] = right_tile
+            elif blank_loc[0] == 3:
+                self.row3[1] = 0
+                self.row3[0] = right_tile
+            else:
+                sys.exit('We should really not be here.')
+        elif blank_loc[1] == 2:
+
+            # The blank is in the 2nd column, so let's figure out what tile is to the right of it
+            right_tile = self.get_tile(blank_loc[0], 3)
+
+            # Switch the tiles
+            if blank_loc[0] == 1:
+                self.row1[2] = 0
+                self.row1[1] = right_tile
+            elif blank_loc[0] == 2:
+                self.row2[2] = 0
+                self.row2[1] = right_tile
+            elif blank_loc[0] == 3:
+                self.row3[2] = 0
+                self.row3[1] = right_tile
+            else:
+                sys.exit('We really should not be here.')
+        else:
+            sys.exit('We should not be here.')
 
         new_row1 = self.row1
         new_row2 = self.row2
