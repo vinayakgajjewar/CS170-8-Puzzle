@@ -1,6 +1,7 @@
 # node.py
 
 import sys
+import math
 
 class Node:
 
@@ -275,12 +276,81 @@ class Node:
     # Misplaced tile heuristic
     # Just return the number of tiles that aren't in the proper spot
     def misplaced_tile_heuristic(self):
-        pass
+
+        # To keep track of the number of misplaced tiles
+        count = 0
+        
+        # There is a more elegant way to do this but I don't care
+        if self.row1[0] != 1:
+            count += 1
+        if self.row1[1] != 2:
+            count += 1
+        if self.row1[2] != 3:
+            count += 1
+        if self.row2[0] != 4:
+            count += 1
+        if self.row2[1] != 5:
+            count += 1
+        if self.row2[2] != 6:
+            count += 1
+        if self.row3[0] != 7:
+            count += 1
+        if self.row3[1] != 8:
+            count += 1
+        if self.row3[2] != 0:
+            count += 1
+        
+        return count
+
+    # Helper function for the Euclidean distance heuristic
+    # loc1 and loc2 are coords in the form [x, y]
+    def calc_distance(self, loc1, loc2):
+        return math.sqrt((loc2[0] - loc1[0]) ** 2 + (loc2[1] - loc1[1]) ** 2)
+    
+    # Helper function for the Euclidean distance heuristic
+    # Given a tile number, return the location it should be in as [x, y]
+    def get_correct_pos(self, tile):
+        row = 0
+        col = 0
+
+        # Figure out what row
+        if tile in [1, 2, 3]:
+            row = 1
+        elif tile in [4, 5, 6]:
+            row = 2
+        elif tile in [7, 8, 0]:
+            row = 3
+        else:
+            sys.exit('Invalid input.')
+
+        # Figure out what col
+        if tile in [1, 4, 7]:
+            col = 1
+        elif tile in [2, 5, 8]:
+            col = 2
+        elif tile in [3, 6, 0]:
+            col = 3
+        else:
+            sys.exit('Invalid input.')
+
+        # Return the goal state location of the requested tile
+        loc = [row, col]
+        return loc
 
     # Euclidean distance heuristic
     # Sum up the Euclidean distances of each tile to where it should be
     def euclidean_distance_heuristic(self):
-        pass
+
+        # Sum of distances
+        sum = 0
+
+        # Loop through all tiles
+        for i in range(9):
+            dist = self.calc_distance(self.locate_tile(i), self.get_correct_pos(i))
+            #print(f'Distance for {i} tile: {dist}.')
+            sum += dist
+        
+        return sum
 
 if __name__ == '__main__':
     sys.exit('Don\'t run node.py directly!')
