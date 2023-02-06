@@ -25,6 +25,46 @@ class Node:
         # Pretty-print the board state
         return f'{self.row1[0]} {self.row1[1]} {self.row1[2]}\n{self.row2[0]} {self.row2[1]} {self.row2[2]}\n{self.row3[0]} {self.row3[1]} {self.row3[2]}'
 
+    # Expand the current node
+    # Return a list of all resulting nodes
+    def expand(self):
+        expanded_nodes = []
+
+        # Check if we can move the blank up
+        if self.is_blank_up_legal():
+            blank_up_rows = self.blank_up()
+            expanded_nodes.append(Node(blank_up_rows[0], blank_up_rows[1], blank_up_rows[2]))
+
+        # Check if we can move the blank down
+        if self.is_blank_down_legal():
+            blank_down_rows = self.blank_down()
+            expanded_nodes.append(Node(blank_down_rows[0], blank_down_rows[1], blank_down_rows[2]))
+
+        # Check if we can move the blank left
+        if self.is_blank_left_legal():
+            blank_left_rows = self.blank_left()
+            expanded_nodes.append(Node(blank_left_rows[0], blank_left_rows[1], blank_left_rows[2]))
+
+        # Check if we can move the blank right
+        if self.is_blank_right_legal():
+            blank_right_rows = self.blank_right()
+            expanded_nodes.append(Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2]))
+
+        # Return all expanded nodes
+        return expanded_nodes
+
+    # Check if the node is the goal state
+    # Return true if it is
+    # Return false if it isn't
+    def is_goal_state(self):
+        if self.row1 != [1, 2, 3]:
+            return False
+        if self.row2 != [4, 5, 6]:
+            return False
+        if self.row3 != [7, 8, 0]:
+            return False
+        return True
+
     # Utility function to get the tile at a specified row and column
     # Rows and columns are 1-indexed
     def get_tile(self, row, col):
