@@ -5,8 +5,11 @@ import math
 
 class Node:
 
-    # Pointer to parent node
+    # Parent node
     parent = None
+
+    # Children nodes
+    children = None
 
     # These class attributes hold the puzzle state in the current node
     row1 = []
@@ -15,6 +18,7 @@ class Node:
 
     # Constructor
     def __init__(self, row1, row2, row3):
+        self.children = []
         self.row1 = row1
         self.row2 = row2
         self.row3 = row3
@@ -33,22 +37,26 @@ class Node:
         # Check if we can move the blank up
         if self.is_blank_up_legal():
             blank_up_rows = self.blank_up()
-            expanded_nodes.append(Node(blank_up_rows[0], blank_up_rows[1], blank_up_rows[2]))
+            blank_up_node = Node(blank_up_rows[0], blank_up_rows[1], blank_up_rows[2])
+            expanded_nodes.append(blank_up_node)
 
         # Check if we can move the blank down
         if self.is_blank_down_legal():
             blank_down_rows = self.blank_down()
-            expanded_nodes.append(Node(blank_down_rows[0], blank_down_rows[1], blank_down_rows[2]))
+            blank_down_node = Node(blank_down_rows[0], blank_down_rows[1], blank_down_rows[2])
+            expanded_nodes.append(blank_down_node)
 
         # Check if we can move the blank left
         if self.is_blank_left_legal():
             blank_left_rows = self.blank_left()
-            expanded_nodes.append(Node(blank_left_rows[0], blank_left_rows[1], blank_left_rows[2]))
+            blank_left_node = Node(blank_left_rows[0], blank_left_rows[1], blank_left_rows[2])
+            expanded_nodes.append(blank_left_node)
 
         # Check if we can move the blank right
         if self.is_blank_right_legal():
             blank_right_rows = self.blank_right()
-            expanded_nodes.append(Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2]))
+            blank_right_node = Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2])
+            expanded_nodes.append(blank_right_node)
 
         # Return all expanded nodes
         return expanded_nodes
@@ -113,6 +121,10 @@ class Node:
 
     def blank_up(self):
 
+        new_row1 = self.row1.copy()
+        new_row2 = self.row2.copy()
+        new_row3 = self.row3.copy()
+
         # Check if the operation is legal
         if self.is_blank_up_legal() == False:
             sys.exit('Error: can\'t move the blank up in this configuration.')
@@ -126,26 +138,26 @@ class Node:
             top_tile = self.get_tile(1, blank_loc[1])
 
             # Switch the tiles
-            self.row1[blank_loc[1] - 1] = 0
-            self.row2[blank_loc[1] - 1] = top_tile
+            new_row1[blank_loc[1] - 1] = 0
+            new_row2[blank_loc[1] - 1] = top_tile
         elif blank_loc[0] == 3:
             
             # The blank is in the 3rd row, so let's figure out what tile is on top of it
             top_tile = self.get_tile(2, blank_loc[1])
 
             # Switch the tiles
-            self.row2[blank_loc[1] - 1] = 0
-            self.row3[blank_loc[1] - 1] = top_tile
+            new_row2[blank_loc[1] - 1] = 0
+            new_row3[blank_loc[1] - 1] = top_tile
         else:
             sys.exit("We should not be here.")
-
-        new_row1 = self.row1
-        new_row2 = self.row2
-        new_row3 = self.row3
 
         return [new_row1, new_row2, new_row3]
 
     def blank_down(self):
+
+        new_row1 = self.row1.copy()
+        new_row2 = self.row2.copy()
+        new_row3 = self.row3.copy()
 
         # Check if the operation is legal
         if self.is_blank_down_legal() == False:
@@ -160,25 +172,26 @@ class Node:
             bottom_tile = self.get_tile(2, blank_loc[1])
 
             # Switch the tiles
-            self.row2[blank_loc[1] - 1] = 0
-            self.row1[blank_loc[1] - 1] = bottom_tile
+            new_row2[blank_loc[1] - 1] = 0
+            new_row1[blank_loc[1] - 1] = bottom_tile
         elif blank_loc[0] == 2:
             
             # The blank is in the 2nd row, so let's figure out what tile is under it
             bottom_tile = self.get_tile(3, blank_loc[1])
 
             # Switch the tiles
-            self.row3[blank_loc[1] - 1] = 0
-            self.row2[blank_loc[1] - 1] = bottom_tile
+            new_row3[blank_loc[1] - 1] = 0
+            new_row2[blank_loc[1] - 1] = bottom_tile
         else:
             sys.exit('We should definitely not be here.')
 
-        new_row1 = self.row1
-        new_row2 = self.row2
-        new_row3 = self.row3
         return [new_row1, new_row2, new_row3]
 
     def blank_left(self):
+
+        new_row1 = self.row1.copy()
+        new_row2 = self.row2.copy()
+        new_row3 = self.row3.copy()
 
         # Check if the operation is legal
         if self.is_blank_left_legal() == False:
@@ -194,14 +207,14 @@ class Node:
 
             # Switch the tiles
             if blank_loc[0] == 1:
-                self.row1[0] = 0
-                self.row1[1] = left_tile
+                new_row1[0] = 0
+                new_row1[1] = left_tile
             elif blank_loc[0] == 2:
-                self.row2[0] = 0
-                self.row2[1] = left_tile
+                new_row2[0] = 0
+                new_row2[1] = left_tile
             elif blank_loc[0] == 3:
-                self.row3[0] = 0
-                self.row3[1] = left_tile
+                new_row3[0] = 0
+                new_row3[1] = left_tile
             else:
                 sys.exit('We really should not be here.')
         elif blank_loc[1] == 3:
@@ -211,25 +224,26 @@ class Node:
 
             # Switch the tiles
             if blank_loc[0] == 1:
-                self.row1[1] = 0
-                self.row1[2] = left_tile
+                new_row1[1] = 0
+                new_row1[2] = left_tile
             elif blank_loc[0] == 2:
-                self.row2[1] = 0
-                self.row2[2] = left_tile
+                new_row2[1] = 0
+                new_row2[2] = left_tile
             elif blank_loc[0] == 3:
-                self.row3[1] = 0
-                self.row3[2] = left_tile
+                new_row3[1] = 0
+                new_row3[2] = left_tile
             else:
                 sys.exit('We really should not be here.')
         else:
             sys.exit('We should not be here.')
 
-        new_row1 = self.row1
-        new_row2 = self.row2
-        new_row3 = self.row3
         return [new_row1, new_row2, new_row3]
 
     def blank_right(self):
+
+        new_row1 = self.row1.copy()
+        new_row2 = self.row2.copy()
+        new_row3 = self.row3.copy()
 
         # Check if the operation is legal
         if self.is_blank_right_legal() == False:
@@ -245,14 +259,14 @@ class Node:
 
             # Switch the tiles
             if blank_loc[0] == 1:
-                self.row1[1] = 0
-                self.row1[0] = right_tile
+                new_row1[1] = 0
+                new_row1[0] = right_tile
             elif blank_loc[0] == 2:
-                self.row2[1] = 0
-                self.row2[0] = right_tile
+                new_row2[1] = 0
+                new_row2[0] = right_tile
             elif blank_loc[0] == 3:
-                self.row3[1] = 0
-                self.row3[0] = right_tile
+                new_row3[1] = 0
+                new_row3[0] = right_tile
             else:
                 sys.exit('We should really not be here.')
         elif blank_loc[1] == 2:
@@ -262,22 +276,19 @@ class Node:
 
             # Switch the tiles
             if blank_loc[0] == 1:
-                self.row1[2] = 0
-                self.row1[1] = right_tile
+                new_row1[2] = 0
+                new_row1[1] = right_tile
             elif blank_loc[0] == 2:
-                self.row2[2] = 0
-                self.row2[1] = right_tile
+                new_row2[2] = 0
+                new_row2[1] = right_tile
             elif blank_loc[0] == 3:
-                self.row3[2] = 0
-                self.row3[1] = right_tile
+                new_row3[2] = 0
+                new_row3[1] = right_tile
             else:
                 sys.exit('We really should not be here.')
         else:
             sys.exit('We should not be here.')
 
-        new_row1 = self.row1
-        new_row2 = self.row2
-        new_row3 = self.row3
         return [new_row1, new_row2, new_row3]
 
     # The below methods check if the corresponding operator is legal given the current puzzle state
