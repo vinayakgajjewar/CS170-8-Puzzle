@@ -40,6 +40,7 @@ class Node:
 
     # Expand the current node
     # Return a list of all resulting nodes
+    # TODO: update each resulting node with its parent
     def expand(self):
         expanded_nodes = []
 
@@ -66,6 +67,11 @@ class Node:
             blank_right_rows = self.blank_right()
             blank_right_node = Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2])
             expanded_nodes.append(blank_right_node)
+        
+        # Loop through each node and update its parent properly
+        # This is so that we can reconstruct the goal path later
+        for node in expanded_nodes:
+            node.parent = self
 
         # Return all expanded nodes
         return expanded_nodes
@@ -409,8 +415,21 @@ class Node:
             dist = self.calc_distance(self.locate_tile(i), self.get_correct_pos(i))
             #print(f'Distance for {i} tile: {dist}.')
             sum += dist
-        
+
         return sum
+    
+    # Hahaha
+    def uniform_cost_heuristic(self):
+        return 0
+    
+    # Trace the solution path
+    def trace(self):
+
+        # Recursion
+        if (self.parent):
+            return 1 + self.parent.trace()
+        else:
+            return 0
 
 if __name__ == '__main__':
     sys.exit('Don\'t run node.py directly!')

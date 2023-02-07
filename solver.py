@@ -39,7 +39,7 @@ class Solver:
             if t1.is_frontier_empty():
                 print('We have not found a solution.')
                 break
-        
+
             # Pick a leaf node and remove it from the frontier
             leaf = t1.pop_leaf_node()
             print('Popped the following node from the frontier:')
@@ -48,6 +48,10 @@ class Solver:
             # If the node contains a goal state, return the corresponding solution
             if leaf.is_goal_state():
                 print('We have found the solution.')
+
+                # Now that we found the solution, let's trace the parent pointers to recontruct the solution
+                goal_path = leaf.trace()
+                print(f'The solution is at depth {goal_path}.')
                 break
 
             # Add the node to the explored set
@@ -73,10 +77,6 @@ class Solver:
         # What was the max number of nodes in the frontier at any one time?
         # TODO
         print(f'The max number of nodes in the frontier at any one time was {max_nodes_in_frontier}.')
-
-        # What is the depth of the solution?
-        # TODO
-        print('The depth of the solution is ZZZ.')
 
 if __name__ == '__main__':
     sys.exit('Don\'t run solver.py directly!')
