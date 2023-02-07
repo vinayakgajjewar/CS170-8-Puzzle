@@ -41,7 +41,6 @@ else:
 print('Enter your choice of algorithm.')
 print('1. Uniform cost search (h(n) = 0).')
 print('2. A* with misplaced tile heuristic.')
-print('3. A* with euclidean distance heuristic.')
 
 # TODO: we need this choice to actually matter
 algorithm_choice = input()
