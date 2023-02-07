@@ -16,6 +16,15 @@ class Node:
     row2 = []
     row3 = []
 
+    # Implement '<' operator so that we can use a priority queue to store Nodes
+    def __lt__(self, other):
+        my_val = self.misplaced_tile_heuristic()
+        other_val = other.misplaced_tile_heuristic()
+        if my_val < other_val:
+            return True
+        else:
+            return False
+
     # Constructor
     def __init__(self, row1, row2, row3):
         self.children = []
