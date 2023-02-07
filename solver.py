@@ -9,9 +9,16 @@ class Solver:
     # This class attribute will store the initial state of the puzzle as a 3x3 list
     problem = []
 
+    # This class attribute tells us which algorithm to use
+    # '1': Uniform cost search (h(n) = 0)
+    # '2': A* with misplaced tile heuristic
+    # '3': A* with Euclidean distance heuristic
+    alg = -1
+
     # Constructor
-    def __init__(self, problem):
+    def __init__(self, problem, alg):
         self.problem = problem
+        self.alg = alg
 
     # This function will run graph search on the problem passed into it
     def graph_search(self):
@@ -21,6 +28,9 @@ class Solver:
 
         # Keep track of the number of expanded nodes
         num_nodes_expanded = 0
+
+        # Keep track of the max number of nodes in the frontier
+        max_nodes_in_frontier = 0
 
         # Loop until we either find a solution or exhaust all possibilities
         while True:
@@ -52,13 +62,17 @@ class Solver:
                 num_nodes_expanded += 1
                 if node not in t1.frontier or node not in t1.explored_set:
                     t1.add_to_frontier(node)
+
+                    # Update max_nodes_in_frontier if necessary
+                    if max_nodes_in_frontier < len(t1.frontier):
+                        max_nodes_in_frontier = len(t1.frontier)
         
         # How many nodes did we expand?
         print(f'We expanded {num_nodes_expanded} nodes.')
 
         # What was the max number of nodes in the frontier at any one time?
         # TODO
-        print('The max number of nodes in the frontier at any one time was X.')
+        print(f'The max number of nodes in the frontier at any one time was {max_nodes_in_frontier}.')
 
         # What is the depth of the solution?
         # TODO
