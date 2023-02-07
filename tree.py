@@ -5,7 +5,7 @@ import node
 class Tree:
 
     # Explored set
-    explored_set = None
+    explored_set = []
 
     # Frontier
     # This will be implemented as a priority queue
@@ -24,9 +24,6 @@ class Tree:
         init_row2 = initial_state[1]
         init_row3 = initial_state[2]
         head = node.Node(init_row1, init_row2, init_row3)
-
-        # Initialize the explored set to be empty
-        explored_set = []
 
         # Initialize the frontier with the initial state of the problem
         heapq.heapify(self.frontier)
@@ -48,6 +45,10 @@ class Tree:
     # Add a node to the explored set
     def add_to_explored(self, node):
         self.frontier.append(node)
+    
+    # Add a node to the frontier
+    def add_to_frontier(self, node):
+        heapq.heappush(self.frontier, node)
 
 
 if __name__ == '__main__':
