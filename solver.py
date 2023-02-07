@@ -42,16 +42,24 @@ class Solver:
 
             # Pick a leaf node and remove it from the frontier
             leaf = t1.pop_leaf_node()
-            print('Popped the following node from the frontier:')
+            g_n = leaf.g_n
+            h_n = leaf.euclidean_distance_heuristic()
+            print(f'Popped the following node from the frontier (g(n)={g_n}, h(n)={h_n}):')
             print(leaf)
 
             # If the node contains a goal state, return the corresponding solution
             if leaf.is_goal_state():
                 print('We have found the solution.')
 
-                # Now that we found the solution, let's trace the parent pointers to recontruct the solution
-                goal_path = leaf.trace()
-                print(f'The solution is at depth {goal_path}.')
+                # Now that we found the solution, let's compute the solution depth
+                # This is inefficient and unnecessary but it works
+                depth = leaf.compute_depth()
+                print(f'The solution is at depth {depth}.')
+
+                # Let's compute the path
+                trace = leaf.trace()
+                print('Solution path:')
+                print(trace)
                 break
 
             # Add the node to the explored set
@@ -75,7 +83,6 @@ class Solver:
         print(f'We expanded {num_nodes_expanded} nodes.')
 
         # What was the max number of nodes in the frontier at any one time?
-        # TODO
         print(f'The max number of nodes in the frontier at any one time was {max_nodes_in_frontier}.')
 
 if __name__ == '__main__':

@@ -5,6 +5,13 @@ import math
 
 class Node:
 
+    # What operator did we peform to get to this state
+    # Possible values: 'blank_up', 'blank_down', 'blank_left', 'blank_right'
+    previous_operator = ''
+
+    # Node depth
+    g_n = 0
+
     # Parent node
     parent = None
 
@@ -18,8 +25,8 @@ class Node:
 
     # Implement '<' operator so that we can use a priority queue to store Nodes
     def __lt__(self, other):
-        my_val = self.misplaced_tile_heuristic()
-        other_val = other.misplaced_tile_heuristic()
+        my_val = self.euclidean_distance_heuristic() + self.g_n
+        other_val = other.euclidean_distance_heuristic() + other.g_n
         if my_val < other_val:
             return True
         else:
@@ -40,7 +47,6 @@ class Node:
 
     # Expand the current node
     # Return a list of all resulting nodes
-    # TODO: update each resulting node with its parent
     def expand(self):
         expanded_nodes = []
 
@@ -48,30 +54,43 @@ class Node:
         if self.is_blank_up_legal():
             blank_up_rows = self.blank_up()
             blank_up_node = Node(blank_up_rows[0], blank_up_rows[1], blank_up_rows[2])
+
+            # Keep track of operator
+            blank_up_node.previous_operator = 'blank_up'
             expanded_nodes.append(blank_up_node)
 
         # Check if we can move the blank down
         if self.is_blank_down_legal():
             blank_down_rows = self.blank_down()
             blank_down_node = Node(blank_down_rows[0], blank_down_rows[1], blank_down_rows[2])
+
+            # Keep track of operator
+            blank_down_node.previous_operator = 'blank_down'
             expanded_nodes.append(blank_down_node)
 
         # Check if we can move the blank left
         if self.is_blank_left_legal():
             blank_left_rows = self.blank_left()
             blank_left_node = Node(blank_left_rows[0], blank_left_rows[1], blank_left_rows[2])
+
+            # Keep track of operator
+            blank_left_node.previous_operator = 'blank_left'
             expanded_nodes.append(blank_left_node)
 
         # Check if we can move the blank right
         if self.is_blank_right_legal():
             blank_right_rows = self.blank_right()
             blank_right_node = Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2])
+
+            # Keep track of operator
+            blank_right_node.previous_operator = 'blank_right'
             expanded_nodes.append(blank_right_node)
         
-        # Loop through each node and update its parent properly
+        # Loop through each node and update its parent and g_n properly
         # This is so that we can reconstruct the goal path later
         for node in expanded_nodes:
             node.parent = self
+            node.g_n = self.g_n + 1
 
         # Return all expanded nodes
         return expanded_nodes
@@ -307,7 +326,6 @@ class Node:
         return [new_row1, new_row2, new_row3]
 
     # The below methods check if the corresponding operator is legal given the current puzzle state
-    # TODO: rewrite these using locate_tile()
 
     # If the blank is in the first row, we cannot perform this operation
     def is_blank_up_legal(self):
@@ -413,23 +431,36 @@ class Node:
         # Loop through all tiles
         for i in range(9):
             dist = self.calc_distance(self.locate_tile(i), self.get_correct_pos(i))
-            #print(f'Distance for {i} tile: {dist}.')
             sum += dist
 
         return sum
-    
+
     # Hahaha
     def uniform_cost_heuristic(self):
         return 0
     
-    # Trace the solution path
-    def trace(self):
-
-        # Recursion
+    # Find the depth of the goal node
+    def compute_depth(self):
         if (self.parent):
-            return 1 + self.parent.trace()
+
+            # Recursive case
+            return 1 + self.parent.compute_depth()
         else:
+
+            # Base case
+            # Root node has depth 0
             return 0
+    
+    # Recursive function for computing the solution path
+    def trace(self):
+        if (self.parent):
+
+            # Recursive case
+            return self.parent.trace() + ' -> ' + self.previous_operator
+        else:
+
+            # Base case
+            return 'Start'
 
 if __name__ == '__main__':
     sys.exit('Don\'t run node.py directly!')
