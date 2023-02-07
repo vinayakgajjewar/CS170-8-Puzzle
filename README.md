@@ -1,4 +1,4 @@
-# CS170-8-Puzzle
+# CS170 8-Puzzle Solver
 
 This project uses Python 3.10.6. To run the solver, execute the following command and follow the prompts.
 
