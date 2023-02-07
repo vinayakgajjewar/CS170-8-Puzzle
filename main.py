@@ -1,5 +1,6 @@
 import sys
 import solver
+import time
 
 # Initial state of the problem
 # 3x3 list
@@ -41,10 +42,18 @@ else:
 print('Enter your choice of algorithm.')
 print('1. Uniform cost search (h(n) = 0).')
 print('2. A* with misplaced tile heuristic.')
+print('3. A* with Euclidean distance heuristic.')
 
 # TODO: we need this choice to actually matter
 algorithm_choice = input()
 
+# Start timer
+t0 = time.time()
+
 # Initialize solver and perform graph search
-s = solver.Solver(initial_state)
+s = solver.Solver(initial_state, algorithm_choice)
 s.graph_search()
+
+# Stop timer
+t1 = time.time()
+print(f'Time taken: {t1 - t0}.')
