@@ -17,13 +17,17 @@ class Tree:
 
     # Constructor
     # initial_state is a list of rows representing the initial state of the problem
-    def __init__(self, initial_state):
+    # algorithm has 3 possible values:
+    # "uniform-cost"
+    # "a-star-misplaced-tile"
+    # "a-star-euclidean-distance"
+    def __init__(self, initial_state, algorithm):
 
         # Create the initial node
         init_row1 = initial_state[0]
         init_row2 = initial_state[1]
         init_row3 = initial_state[2]
-        head = node.Node(init_row1, init_row2, init_row3)
+        head = node.Node(init_row1, init_row2, init_row3, algorithm)
 
         # Initialize the frontier with the initial state of the problem
         heapq.heapify(self.frontier)

@@ -5,8 +5,15 @@ import math
 
 class Node:
 
+    # I use this class attribute so that each node "knows" which algorithm to use
+    # Possible values for this attribute are:
+    # "uniform-cost"
+    # "a-star-misplaced-tile"
+    # "a-star-euclidean-tile"
+    alg = ''
+
     # What operator did we peform to get to this state
-    # Possible values: 'blank_up', 'blank_down', 'blank_left', 'blank_right'
+    # Possible values: 'blank up', 'blank down', 'blank left', 'blank right'
     previous_operator = ''
 
     # Node depth
@@ -24,20 +31,35 @@ class Node:
     row3 = []
 
     # Implement '<' operator so that we can use a priority queue to store Nodes
+    # TODO: we need to be able to change the algorithm
     def __lt__(self, other):
-        my_val = self.euclidean_distance_heuristic() + self.g_n
-        other_val = other.euclidean_distance_heuristic() + other.g_n
+        my_val = 0
+        other_val = 0
+        if self.alg == 'uniform-cost':
+            my_val = self.uniform_cost_heuristic() + self.g_n
+            other_val = other.uniform_cost_heuristic() + other.g_n
+        elif self.alg == 'a-star-misplaced-tile':
+            my_val = self.misplaced_tile_heuristic() + self.g_n
+            other_val = other.misplaced_tile_heuristic() + other.g_n
+        elif self.alg == 'a-star-euclidean-distance':
+            my_val = self.euclidean_distance_heuristic() + self.g_n
+            other_val = other.euclidean_distance_heuristic() + other.g_n
+        else:
+            print('Invalid algorithm.')
+            sys.exit()
+        
         if my_val < other_val:
             return True
         else:
             return False
 
     # Constructor
-    def __init__(self, row1, row2, row3):
+    def __init__(self, row1, row2, row3, alg):
         self.children = []
         self.row1 = row1
         self.row2 = row2
         self.row3 = row3
+        self.alg = alg
 
     # Utility method for string representation of the node
     def __str__(self):
@@ -53,37 +75,37 @@ class Node:
         # Check if we can move the blank up
         if self.is_blank_up_legal():
             blank_up_rows = self.blank_up()
-            blank_up_node = Node(blank_up_rows[0], blank_up_rows[1], blank_up_rows[2])
+            blank_up_node = Node(blank_up_rows[0], blank_up_rows[1], blank_up_rows[2], self.alg)
 
             # Keep track of operator
-            blank_up_node.previous_operator = 'blank_up'
+            blank_up_node.previous_operator = 'blank up'
             expanded_nodes.append(blank_up_node)
 
         # Check if we can move the blank down
         if self.is_blank_down_legal():
             blank_down_rows = self.blank_down()
-            blank_down_node = Node(blank_down_rows[0], blank_down_rows[1], blank_down_rows[2])
+            blank_down_node = Node(blank_down_rows[0], blank_down_rows[1], blank_down_rows[2], self.alg)
 
             # Keep track of operator
-            blank_down_node.previous_operator = 'blank_down'
+            blank_down_node.previous_operator = 'blank down'
             expanded_nodes.append(blank_down_node)
 
         # Check if we can move the blank left
         if self.is_blank_left_legal():
             blank_left_rows = self.blank_left()
-            blank_left_node = Node(blank_left_rows[0], blank_left_rows[1], blank_left_rows[2])
+            blank_left_node = Node(blank_left_rows[0], blank_left_rows[1], blank_left_rows[2], self.alg)
 
             # Keep track of operator
-            blank_left_node.previous_operator = 'blank_left'
+            blank_left_node.previous_operator = 'blank left'
             expanded_nodes.append(blank_left_node)
 
         # Check if we can move the blank right
         if self.is_blank_right_legal():
             blank_right_rows = self.blank_right()
-            blank_right_node = Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2])
+            blank_right_node = Node(blank_right_rows[0], blank_right_rows[1], blank_right_rows[2], self.alg)
 
             # Keep track of operator
-            blank_right_node.previous_operator = 'blank_right'
+            blank_right_node.previous_operator = 'blank right'
             expanded_nodes.append(blank_right_node)
         
         # Loop through each node and update its parent and g_n properly

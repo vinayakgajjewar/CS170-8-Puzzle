@@ -13,7 +13,7 @@ class Solver:
     # '1': Uniform cost search (h(n) = 0)
     # '2': A* with misplaced tile heuristic
     # '3': A* with Euclidean distance heuristic
-    alg = -1
+    alg = ''
 
     # Constructor
     def __init__(self, problem, alg):
@@ -24,7 +24,14 @@ class Solver:
     def graph_search(self):
 
         # Initialize problem tree
-        t1 = tree.Tree(self.problem)
+        algorithm_str = ''
+        if self.alg == '1':
+            algorithm_str = 'uniform-cost'
+        elif self.alg == '2':
+            algorithm_str = 'a-star-misplaced-tile'
+        elif self.alg == '3':
+            algorithm_str = 'a-star-euclidean-distance'
+        t1 = tree.Tree(self.problem, algorithm_str)
 
         # Keep track of the number of expanded nodes
         num_nodes_expanded = 0
@@ -78,7 +85,7 @@ class Solver:
                     # Update max_nodes_in_frontier if necessary
                     if max_nodes_in_frontier < len(t1.frontier):
                         max_nodes_in_frontier = len(t1.frontier)
-        
+
         # How many nodes did we expand?
         print(f'We expanded {num_nodes_expanded} nodes.')
 
